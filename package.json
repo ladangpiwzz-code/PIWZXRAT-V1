@@ -1,0 +1,16 @@
+{
+  "name": "devilrat-koyeb",
+  "version": "1.0.0",
+  "description": "DEVILRAT V1 - Koyeb Deployment",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.0",
+    "cors": "^2.8.5",
+    "sqlite3": "^5.1.6"
+  }
+}
